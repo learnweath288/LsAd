@@ -1,0 +1,129 @@
+/* --- LUXURY COLOR PALETTE & FONTS --- */
+:root {
+    /* Primary Luxury Colors */
+    --color-primary: #0A0A0A;    /* Deep Charcoal/Near-Black for Backgrounds */
+    --color-secondary: #D4AF37; /* Gold/Metallic Accent */
+    --color-text-light: #F0F0F0; /* Off-White for Primary Text */
+    --color-text-dark: #222222;  /* Dark Text for light areas */
+    --color-neutral-subtle: #444444; /* Dark Grey for borders/dividers */
+
+    /* Typography */
+    --font-primary: 'Playfair Display', serif; /* Elegant, Serene Font */
+    --font-secondary: 'Roboto', sans-serif;   /* Clean, Readable Font */
+}
+
+/* --- BASE STYLES --- */
+body {
+    background-color: var(--color-primary);
+    color: var(--color-text-light);
+    font-family: var(--font-secondary);
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+}
+
+/* --- TYPOGRAPHY --- */
+h1, h2, h3 {
+    font-family: var(--font-primary);
+    font-weight: 400; /* Lighter weight often looks more elegant */
+    color: var(--color-text-light);
+    letter-spacing: 0.1em; /* Subtle spacing adds sophistication */
+    margin-top: 0;
+}
+
+h1 {
+    font-size: 3em;
+    text-align: center;
+    border-bottom: 1px solid var(--color-neutral-subtle);
+    padding-bottom: 0.5em;
+    margin-bottom: 1em;
+}
+
+/* --- ACCENT ELEMENTS (Gold) --- */
+.gold-text {
+    color: var(--color-secondary);
+    font-weight: 700;
+}
+
+/* --- BUTTONS/CTAs --- */
+.cta-button {
+    display: inline-block;
+    padding: 12px 30px;
+    background-color: var(--color-secondary);
+    color: var(--color-primary); /* Dark text on gold */
+    text-decoration: none;
+    text-transform: uppercase;
+    font-family: var(--font-secondary);
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.cta-button:hover {
+    background-color: #E6C252; /* Slightly lighter gold on hover */
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+/* --- NAVBAR/HEADER (Dark Elegance) --- */
+.header {
+    background-color: var(--color-primary);
+    padding: 15px 5%;
+    border-bottom: 1px solid var(--color-neutral-subtle);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-family: var(--font-primary);
+    font-size: 1.8em;
+    color: var(--color-secondary); /* Gold Logo */
+    text-decoration: none;
+    letter-spacing: 0.2em;
+}
+
+.nav a {
+    color: var(--color-text-light);
+    text-decoration: none;
+    margin-left: 25px;
+    padding: 5px 0;
+    position: relative;
+    text-transform: uppercase;
+    font-size: 0.9em;
+}
+
+.nav a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background-color: var(--color-secondary);
+    transition: width 0.3s ease;
+}
+
+.nav a:hover::after {
+    width: 100%;
+}
+
+/* --- SECTION PADDING/WHITE SPACE (Crucial for Luxury) --- */
+.section {
+    padding: 80px 5%;
+    max-width: 1200px; /* Constraining width aids elegance */
+    margin: 0 auto;
+    text-align: center;
+}
+
+/* --- FOOTER --- */
+.footer {
+    background-color: var(--color-primary);
+    color: var(--color-neutral-subtle);
+    text-align: center;
+    padding: 40px 5%;
+    border-top: 1px solid var(--color-neutral-subtle);
+    font-size: 0.8em;
+}
