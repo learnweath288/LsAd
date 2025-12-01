@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LS Ad Agency - Unlock Your Growth</title>
+    
+    <!-- 1. Custom CSS File ko yahaan link karein (Yeh zaroori hai!) -->
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- 2. Tailwind CSS CDN (Responsive design ke liye) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- 3. Lucide Icons for aesthetic UI -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Firebase Imports aur JavaScript Logic yahaan shuru hota hai -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, addDoc, setDoc, onSnapshot, collection, query, where, updateDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Global Firebase and Auth variables
+        let app, db, auth, userId;
+        let isAuthReady = false;
+
+        // Global variables for Canvas environment
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : null;
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+
+        setLogLevel('debug'); // Firestore debug logging on karein
+
+        // Utility to handle Firebase Initialization and Authentication
+        const setupFirebase = async () => {
+            if (firebaseConfig) {
+                try {
+                    app = initializeApp(firebaseConfig);
+                    db = getFirestore(app);
+                    auth = getAuth(app);
+
+                    await new Promise((resolve) => {
+                        const unsubscribe = onAuthStateChanged(auth, async (user) => {
+                            unsubscribe(); // Pehle state change ke baad unsubscribe karein
+                            if (user) {
+                                userId = user.uid;
+                            } else {
+                                if (initialAuthToken) {
+                                    await signInWithCustomToken(auth, initialAuthToken);
+                                    userId = auth.currentUser.uid;
+                                } else {
+                                    await signInAnonymously(auth);
+                                    userId = auth.currentUser.uid;
+                                }
+                            }
+                            isAuthReady = true;
+                            console.log("Firebase Auth Ready. User ID:", userId);
+                            document.getElementById('user-id-display').innerText = `User ID: ${userId}`;
+                            document.dispatchEvent(new CustomEvent('authReady'));
+                            resolve();
+                        });
+                    });
+
+                } catch (error) {
+                    console.error("Firebase initialization or authentication failed:", error);
+                    alert(`Error: Firebase initialization failed. Check console for details.`);
+                }
+            } else {
+                 console.warn("Firebase config not available. App will run in non-persistent mode.");
+            }
+        };
+
+        // --- Order System Functions ---
+
+        const ORDER_COLLECTION_PATH = `artifacts/${appId}/public/data/ls_orders`;
+
+        window.submitOrder = async (event) => {
+            event.preventDefault();
+            if (!isAuthReady) {
+                alert("Auth is not ready. Please wait a moment.");
+                return;
+            }
+
+            const form = event.target;
+            const name = form.name.value;
